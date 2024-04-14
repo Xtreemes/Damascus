@@ -1,0 +1,16 @@
+name: Damascus
+version: '${version}'
+main: org.xtreemes.damascus.Damascus
+api-version: '1.20'
+commands:
+  setrank:
+    usage: "/setrank"
+    description: "let me guess"
+  goto:
+    usage: "/goto ID MODE"
+  dev:
+    usage: "/dev"
+  build:
+    usage: "/build"
+  play:
+    usage: "/play"
