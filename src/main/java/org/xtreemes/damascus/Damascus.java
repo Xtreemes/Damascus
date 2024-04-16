@@ -11,7 +11,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.xtreemes.damascus.code.Trigger;
+import org.xtreemes.damascus.code.CodeItemsInfo;
+import org.xtreemes.damascus.code.TriggerType;
 import org.xtreemes.damascus.player.command.Goto;
 import org.xtreemes.damascus.player.command.ModeCommand;
 import org.xtreemes.damascus.player.command.Setrank;
@@ -32,6 +33,7 @@ public final class Damascus extends JavaPlugin {
                 new ChatListener(),
                 new CodeActionListener()
         );
+        CodeItemsInfo.initialize();
 
         getCommand("setrank").setExecutor(new Setrank());
         getCommand("goto").setExecutor(new Goto());
@@ -68,7 +70,7 @@ public final class Damascus extends JavaPlugin {
             t.prefix(r.getFormattedPrefix().append(Component.text(" ")));
         }
     }
-    public static void trigger(Trigger t){
+    public static void trigger(TriggerType t){
 
     }
 }

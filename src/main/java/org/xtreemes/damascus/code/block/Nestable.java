@@ -1,22 +1,23 @@
 package org.xtreemes.damascus.code.block;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import org.xtreemes.damascus.code.CodeBlock;
-import org.xtreemes.damascus.code.block.empty.EmptyAction;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Nestable extends MidLine {
-    public ArrayList<CodeBlock> CODE = new ArrayList<>(Collections.singleton(new EmptyAction()));
+    public ArrayList<CodeBlock> CODE = new ArrayList<>();
     public int getSize(){
         int sum = 1;
         for(CodeBlock c : CODE){
@@ -48,10 +49,17 @@ public class Nestable extends MidLine {
         origin.add(-1, 0, 0);
         Block block = origin.getBlock();
         block.setType(getSign());
-        BlockData bd = block.getBlockData();
-        if(bd instanceof Directional directional){
+        if(block.getState() instanceof Sign s){
+            SignSide side = s.getSide(Side.FRONT);
+            side.line(0, Component.text(getSignMain().toUpperCase()));
+            side.line(2, Component.text(getSignSub()));
+            side.setGlowingText(true);
+            side.setColor(getSignColour());
+
+            Directional directional = (Directional) s.getBlockData();
             directional.setFacing(BlockFace.WEST);
-            block.setBlockData(directional);
+            s.setBlockData(directional);
+            s.update();
         }
         locs.add(origin.clone());
         origin.add(1, 0, 0);
@@ -90,20 +98,16 @@ public class Nestable extends MidLine {
                 int result = nest.addCodeAtIndex(current_index, index, code_to_add);
                 if(result == 1){
                     CODE.add(code_index, code_to_add);
-                    current_index.incrementAndGet();
                     return 2;
                 } else if(result == 2){
-                    current_index.incrementAndGet();
                     return result;
                 } else if(result == 3){
                     CODE.add(code_index+1, code_to_add);
-                    current_index.incrementAndGet();
                     return 2;
                 }
             } else {
                 if(c.addCodeAtIndex(current_index, index) == 1){
                     CODE.add(code_index, code_to_add);
-                    current_index.incrementAndGet();
                     return 2;
                 }
             }
@@ -111,10 +115,8 @@ public class Nestable extends MidLine {
         }
         if(index == current_index.intValue()){
             CODE.add(code_to_add);
-            current_index.incrementAndGet();
             return 2;
         } else if(index == current_index.intValue()+1) {
-            current_index.incrementAndGet();
             return 3;
         }
         current_index.incrementAndGet();

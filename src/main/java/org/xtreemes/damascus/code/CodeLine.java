@@ -6,15 +6,16 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 import org.xtreemes.damascus.code.block.Nestable;
+import org.xtreemes.damascus.code.block.trigger.Trigger;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CodeLine {
 
-    private ArrayList<Location> BLOCKS = new ArrayList<>();
-    private ArrayList<CodeBlock> CODE = new ArrayList<>();
-    private Location LINE_STARTER;
+    private final ArrayList<Location> BLOCKS = new ArrayList<>();
+    private final ArrayList<CodeBlock> CODE = new ArrayList<>();
+    private final Location LINE_STARTER;
 
     public CodeLine(Location line_start){
         this.LINE_STARTER = line_start;
@@ -96,7 +97,7 @@ public class CodeLine {
         }
     }
 
-    public Material updateBlocks(Location loc){
+    public Material updateBlocks(@Nullable Location loc){
         Material give_back = Material.AIR;
         for(Location b: BLOCKS){
             b.getBlock().setType(Material.AIR, false);
@@ -107,9 +108,18 @@ public class CodeLine {
             ArrayList<Location> tentative = c.placeBlocks(current);
             BLOCKS.addAll(tentative);
         }
-        if(BLOCKS.contains(loc)){
-            give_back = loc.getBlock().getType();
+        if(loc != null) {
+            if (BLOCKS.contains(loc)) {
+                give_back = loc.getBlock().getType();
+            }
         }
         return give_back;
+    }
+    public boolean isTrigger(TriggerType t){
+        CodeBlock c = CODE.get(0);
+        if(c instanceof Trigger trigger){
+            return trigger.getTrigger() == t;
+        }
+        return false;
     }
 }

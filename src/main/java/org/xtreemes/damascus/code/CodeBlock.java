@@ -1,5 +1,7 @@
 package org.xtreemes.damascus.code;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -7,11 +9,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class CodeBlock {
@@ -21,6 +24,15 @@ public abstract class CodeBlock {
 
     public Material getSign(){
         return Material.OAK_WALL_SIGN;
+    }
+    public DyeColor getSignColour(){
+        return DyeColor.WHITE;
+    }
+    public String getSignMain(){
+        return "Placeholder";
+    }
+    public String getSignSub(){
+        return "";
     }
     public Material getConnector(){
         return Material.SPRUCE_PLANKS;
@@ -35,10 +47,17 @@ public abstract class CodeBlock {
          origin.add(-1, 0, 0);
          Block block = origin.getBlock();
          block.setType(getSign());
-         BlockData bd = block.getBlockData();
-         if(bd instanceof Directional directional){
+         if(block.getState() instanceof Sign s){
+             SignSide side = s.getSide(Side.FRONT);
+             side.line(0, Component.text(getSignMain().toUpperCase()));
+             side.line(2, Component.text(getSignSub()));
+             side.setGlowingText(true);
+             side.setColor(getSignColour());
+
+             Directional directional = (Directional) s.getBlockData();
              directional.setFacing(BlockFace.WEST);
-             block.setBlockData(directional);
+             s.setBlockData(directional);
+             s.update();
          }
          locs.add(origin.clone());
          origin.add(1, 0, 0);

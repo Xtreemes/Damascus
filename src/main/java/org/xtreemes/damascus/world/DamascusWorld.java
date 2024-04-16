@@ -2,7 +2,10 @@ package org.xtreemes.damascus.world;
 
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
+import org.xtreemes.damascus.code.CodeItemsInfo;
 import org.xtreemes.damascus.code.CodeLine;
+import org.xtreemes.damascus.code.TriggerType;
 import org.xtreemes.damascus.code.block.action.SendMessageAction;
 import org.xtreemes.damascus.player.listener.CodeActionListener;
 import org.xtreemes.damascus.world.gens.DevGen;
@@ -63,7 +66,7 @@ public class DamascusWorld {
     }
 
     public CodeLine getAndAddCodeLine(Location location, Material material){
-        boolean contains = CodeActionListener.LINE_STARTER_MATERIALS.contains(material);
+        boolean contains = CodeItemsInfo.LINE_START.contains(material);
         for(CodeLine cl : CODE_LINES){
             Location loc = cl.getLineStart();
             if(contains){
@@ -92,7 +95,7 @@ public class DamascusWorld {
         return null;
     }
     public CodeLine getCodeLine(Location location, Material material){
-        boolean contains = CodeActionListener.LINE_STARTER_MATERIALS.contains(material);
+        boolean contains = CodeItemsInfo.LINE_START.contains(material);
         for(CodeLine cl : CODE_LINES){
             Location loc = cl.getLineStart();
             if(contains){
@@ -107,5 +110,13 @@ public class DamascusWorld {
     }
     public void removeCodeLine(CodeLine c){
         CODE_LINES.remove(c);
+    }
+    public void trigger(TriggerType t, @Nullable Entity target){
+        for(CodeLine cl : CODE_LINES){
+            if(cl.isTrigger(t)){
+                cl.runCode(target);
+                break;
+            }
+        }
     }
 }

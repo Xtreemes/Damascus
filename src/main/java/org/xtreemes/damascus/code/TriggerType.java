@@ -1,6 +1,6 @@
 package org.xtreemes.damascus.code;
 
-public enum Trigger {
+public enum TriggerType {
     JOIN,
     QUIT,
     RCLICK,
