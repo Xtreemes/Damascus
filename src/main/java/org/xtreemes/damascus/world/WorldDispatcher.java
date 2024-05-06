@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.json.simple.JSONArray;
 import org.xtreemes.damascus.Damascus;
+import org.xtreemes.damascus.databse.DatabaseHandler;
 import org.xtreemes.damascus.player.PlayerInfo;
 import org.xtreemes.damascus.player.PlayerMode;
 
@@ -20,7 +22,17 @@ public class WorldDispatcher {
     private static final HashMap<String, DamascusWorld> WORLDS = new HashMap<>();
 
     public static DamascusWorld getWorld(String id){
-        return WORLDS.computeIfAbsent(id, DamascusWorld::new);
+        if(WORLDS.containsKey(id)){
+            return WORLDS.get(id);
+        } else {
+            DamascusWorld world = new DamascusWorld(id);
+            JSONArray json = DatabaseHandler.getPlotJSON(id);
+            if(json != null){
+                world.parseJSON(json);
+            }
+            WORLDS.put(id, world);
+            return world;
+        }
     }
     public static World getLobby(){return LOBBY;}
 
@@ -46,5 +58,8 @@ public class WorldDispatcher {
         } else if(m == PlayerMode.PLAY){
             p.teleport(getWorld(id).getPlayWorld().getSpawnLocation());
         }
+    }
+    public static HashMap<String, DamascusWorld> getWorlds(){
+        return WORLDS;
     }
 }

@@ -12,20 +12,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.xtreemes.damascus.code.CodeItemsInfo;
-import org.xtreemes.damascus.code.TriggerType;
+import org.xtreemes.damascus.databse.DatabaseHandler;
 import org.xtreemes.damascus.player.command.Goto;
 import org.xtreemes.damascus.player.command.ModeCommand;
 import org.xtreemes.damascus.player.command.Setrank;
 import org.xtreemes.damascus.player.listener.ChatListener;
 import org.xtreemes.damascus.player.listener.CodeActionListener;
 import org.xtreemes.damascus.player.listener.JoinListener;
+import org.xtreemes.damascus.world.DamascusWorld;
+import org.xtreemes.damascus.world.WorldDispatcher;
+
+import java.util.Map;
 
 public final class Damascus extends JavaPlugin {
 
+
+    public static boolean DB_STATUS;
     public static Plugin PLUGIN;
 
     @Override
     public void onEnable() {
+
+        DB_STATUS = DatabaseHandler.connect();
         PLUGIN = this;
         // Plugin startup login
         registerListeners(
@@ -51,7 +59,12 @@ public final class Damascus extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        for(Map.Entry<String, DamascusWorld> entry : WorldDispatcher.getWorlds().entrySet()){
+            String key = entry.getKey();
+            DamascusWorld world = entry.getValue();
+            DatabaseHandler.setPlotJSON(world.getJSON(),key);
+        }
+        DatabaseHandler.disconnect();
     }
 
     private static void registerListeners(Listener... listeners){
@@ -69,8 +82,5 @@ public final class Damascus extends JavaPlugin {
             if(r == Rank.DEFAULT){continue;}
             t.prefix(r.getFormattedPrefix().append(Component.text(" ")));
         }
-    }
-    public static void trigger(TriggerType t){
-
     }
 }

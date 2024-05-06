@@ -5,19 +5,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import org.xtreemes.damascus.code.block.action.CrashAction;
-import org.xtreemes.damascus.code.block.action.SendMessageAction;
+import org.xtreemes.damascus.code.block.conditional.SneakingConditional;
 
-public class ActionInvHolder extends CodeSelection {
-    public ActionInvHolder(Location loc) {
+public class ConditionalInvHolder extends CodeSelection {
+    public ConditionalInvHolder(Location loc) {
         super(loc);
     }
 
     @Override
     public @NotNull Inventory getInventory() {
         INVENTORY = Bukkit.createInventory(this, 27);
-        setItem(Material.BOOK, new SendMessageAction());
-        setItem(Material.BARRIER, new CrashAction());
+        setItem(Material.IRON_LEGGINGS, new SneakingConditional());
         return INVENTORY;
     }
 }

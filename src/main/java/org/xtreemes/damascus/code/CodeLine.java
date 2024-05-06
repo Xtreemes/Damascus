@@ -2,9 +2,9 @@ package org.xtreemes.damascus.code;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.block.Nestable;
 import org.xtreemes.damascus.code.block.trigger.Trigger;
 
@@ -19,6 +19,20 @@ public class CodeLine {
 
     public CodeLine(Location line_start){
         this.LINE_STARTER = line_start;
+    }
+
+    public CodeLine(Location line_start, JSONArray json){
+        this.LINE_STARTER = line_start;
+        for(Object o : json){
+            JSONObject j = (JSONObject) o;
+            CodeBlock cb = CodeList.valueOf((String) j.get("code")).getCodeBlock();
+            Object nest_check = j.get("nested");
+            if(nest_check != null){
+                JSONArray json_array = (JSONArray) nest_check;
+                ((Nestable) cb).addJsonArray(json_array);
+            }
+            CODE.add(cb);
+        }
     }
 
     public Location getLineStart(){
@@ -91,9 +105,9 @@ public class CodeLine {
         return index;
     }
 
-    public void runCode(@Nullable Entity target){
+    public void runCode(RunInfo info){
         for(CodeBlock c : CODE){
-            c.run(target);
+            c.run(info);
         }
     }
 
@@ -121,5 +135,17 @@ public class CodeLine {
             return trigger.getTrigger() == t;
         }
         return false;
+    }
+
+    public JSONObject getCodeText(){
+        JSONObject code_line = new JSONObject();
+        JSONArray array = new JSONArray();
+        String loc_string = LINE_STARTER.x() + "," + LINE_STARTER.y() + "," + LINE_STARTER.z();
+        code_line.put("location",loc_string);
+        for(CodeBlock c : CODE){
+            array.add(c.getJson());
+        }
+        code_line.put("code", array);
+        return code_line;
     }
 }

@@ -7,20 +7,20 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
-import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONObject;
+import org.xtreemes.damascus.code.parameters.Parameters;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public abstract class CodeBlock {
+public abstract class CodeBlock implements Cloneable {
 
     //TODO: add barrel-params as a param
-    abstract public void run(@Nullable Entity target);
+    protected Parameters PARAMS = new Parameters();
+    abstract public void run(RunInfo info);
 
     public Material getSign(){
         return Material.OAK_WALL_SIGN;
@@ -83,5 +83,22 @@ public abstract class CodeBlock {
         }
         current_index.incrementAndGet();
         return 0;
+    }
+
+    public JSONObject getJson(){
+        JSONObject json = new JSONObject();
+        json.put("code",CodeList.classToEnum(this).name());
+        return json;
+    }
+
+    @Override
+    public CodeBlock clone() {
+        try {
+            CodeBlock clone = (CodeBlock) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

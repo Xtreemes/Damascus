@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.xtreemes.damascus.Rank;
+import org.xtreemes.damascus.code.RunInfo;
 import org.xtreemes.damascus.code.TriggerType;
 import org.xtreemes.damascus.world.WorldDispatcher;
 
@@ -42,7 +43,7 @@ public class PlayerInfo {
         if(m == PlayerMode.LOBBY){return;}
         sendMessage(p, "You are now in " + m.name() + " mode.", MessageType.SUCCESS);
         if(m == PlayerMode.PLAY){
-            WorldDispatcher.getWorld(PLAYER_LOCATIONS.get(p)).trigger(TriggerType.JOIN, p);
+            WorldDispatcher.getWorld(PLAYER_LOCATIONS.get(p)).trigger(TriggerType.JOIN, new RunInfo(null, p));
         }
     }
     public static PlayerMode getMode(Player p){return PLAYER_MODES.get(p);}

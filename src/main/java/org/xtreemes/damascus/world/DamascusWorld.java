@@ -1,13 +1,12 @@
 package org.xtreemes.damascus.world;
 
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.CodeItemsInfo;
 import org.xtreemes.damascus.code.CodeLine;
+import org.xtreemes.damascus.code.RunInfo;
 import org.xtreemes.damascus.code.TriggerType;
-import org.xtreemes.damascus.code.block.action.SendMessageAction;
-import org.xtreemes.damascus.player.listener.CodeActionListener;
 import org.xtreemes.damascus.world.gens.DevGen;
 import org.xtreemes.damascus.world.gens.PlayGen;
 
@@ -17,8 +16,8 @@ public class DamascusWorld {
 
     private World DEV;
     private World PLAY;
-    private String ID;
-    private ArrayList<CodeLine> CODE_LINES = new ArrayList<>();
+    private final String ID;
+    private final ArrayList<CodeLine> CODE_LINES = new ArrayList<>();
 
     public World getDevWorld() {
         if(DEV == null){
@@ -111,12 +110,32 @@ public class DamascusWorld {
     public void removeCodeLine(CodeLine c){
         CODE_LINES.remove(c);
     }
-    public void trigger(TriggerType t, @Nullable Entity target){
+    public void trigger(TriggerType t, RunInfo info){
         for(CodeLine cl : CODE_LINES){
             if(cl.isTrigger(t)){
-                cl.runCode(target);
+                cl.runCode(info);
                 break;
             }
         }
+    }
+    public void parseJSON(JSONArray json){
+        for(Object o : json){
+            JSONObject element = (JSONObject) o;
+            String loc_string = element.get("location").toString();
+            String[] split_loc = loc_string.split(",");
+            Location loc = getDevWorld().getSpawnLocation().clone();
+            loc.set(Double.parseDouble(split_loc[0]), Double.parseDouble(split_loc[1]), Double.parseDouble(split_loc[2]));
+            JSONArray array = (JSONArray) element.get("code");
+            CodeLine cl = new CodeLine(loc, array);
+            cl.updateBlocks(null);
+            CODE_LINES.add(cl);
+        }
+    }
+    public JSONArray getJSON(){
+        JSONArray array = new JSONArray();
+        for(CodeLine cl : CODE_LINES){
+            array.add(cl.getCodeText());
+        }
+        return array;
     }
 }

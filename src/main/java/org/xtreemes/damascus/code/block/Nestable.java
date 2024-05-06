@@ -9,9 +9,11 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
-import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.CodeBlock;
+import org.xtreemes.damascus.code.CodeList;
+import org.xtreemes.damascus.code.RunInfo;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +31,7 @@ public class Nestable extends MidLine {
         return sum;
     }
     @Override
-    public void run(@Nullable Entity target) {
+    public void run(RunInfo info) {
 
     }
 
@@ -157,5 +159,38 @@ public class Nestable extends MidLine {
         }
         current_index.incrementAndGet();
         return 0;
+    }
+
+    public void addJsonArray(JSONArray array){
+        for(Object o : array){
+            JSONObject j = (JSONObject) o;
+            CodeBlock cb = CodeList.valueOf((String) j.get("code")).getCodeBlock();
+            Object nest_check = j.get("nested");
+            if(nest_check != null){
+                JSONArray json_array = (JSONArray) nest_check;
+                ((Nestable) cb).addJsonArray(json_array);
+            }
+            CODE.add(cb);
+        }
+    }
+
+    @Override
+    public JSONObject getJson(){
+        JSONObject json = new JSONObject();
+        json.put("code", CodeList.classToEnum(this).name());
+        JSONArray array = new JSONArray();
+        for(CodeBlock c : CODE){
+            array.add(c.getJson());
+        }
+        json.put("nested", array);
+        return json;
+    }
+
+    @Override
+    public Nestable clone() {
+        Nestable clone = (Nestable) super.clone();
+        // TODO: copy mutable state here, so the clone can't change the internals of the original
+        clone.CODE = new ArrayList<>(CODE);
+        return clone;
     }
 }
