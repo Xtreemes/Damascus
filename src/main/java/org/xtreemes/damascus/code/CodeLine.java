@@ -64,13 +64,13 @@ public class CodeLine {
         }
         CODE.add(c);
     }
-    public boolean removeCode(int remove){
+    public boolean removeCode(int remove, @Nullable CodeBlock replace){
         AtomicInteger current_index = new AtomicInteger(0);
         int code_index = 0;
         for(CodeBlock d : CODE){
             if(d instanceof Nestable nest){
                 // If it's nestable, add to the Nestable's CODE value.
-                int result = nest.codeHasIndex(current_index, remove);
+                int result = nest.removeCodeAtIndex(current_index, remove, replace);
                 if(result == 1){
                     CODE.remove(code_index);
                     break;
@@ -90,6 +90,7 @@ public class CodeLine {
         }
         return CODE.isEmpty();
     }
+
     public int getIndex(Location loc){
         int index = (int) Math.round((loc.z() - LINE_STARTER.z())/2);
         int size = 0;
@@ -106,9 +107,11 @@ public class CodeLine {
     }
 
     public void runCode(RunInfo info){
-        for(CodeBlock c : CODE){
-            c.run(info);
-        }
+        new Thread(() -> {
+            for(CodeBlock c : CODE){
+                c.run(info);
+            }
+        }).start();
     }
 
     public Material updateBlocks(@Nullable Location loc){

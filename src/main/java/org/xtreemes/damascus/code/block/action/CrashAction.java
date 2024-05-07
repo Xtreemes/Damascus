@@ -8,10 +8,6 @@ import org.xtreemes.damascus.code.RunInfo;
 public class CrashAction extends Action {
 
     @Override
-    public String getSignSub(){
-        return "Crash";
-    }
-    @Override
     public void run(RunInfo info) {
         Entity e = info.getTargetEntity();
         if(e instanceof Player p){

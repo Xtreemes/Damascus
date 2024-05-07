@@ -5,10 +5,6 @@ import org.bukkit.entity.Player;
 import org.xtreemes.damascus.code.RunInfo;
 
 public class SneakingConditional extends Conditional {
-    @Override
-    public String getSignSub() {
-        return "Sneaking";
-    }
 
     @Override
     public boolean condition(RunInfo info) {

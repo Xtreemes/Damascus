@@ -8,10 +8,6 @@ import org.xtreemes.damascus.code.RunInfo;
 
 public class SendMessageAction extends Action {
     @Override
-    public String getSignSub(){
-        return "Message";
-    }
-    @Override
     public void run(RunInfo info) {
         Entity target = info.getTargetEntity();
         if(target instanceof Player p){

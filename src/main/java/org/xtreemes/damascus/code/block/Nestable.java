@@ -9,12 +9,14 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.CodeBlock;
 import org.xtreemes.damascus.code.CodeList;
 import org.xtreemes.damascus.code.RunInfo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -54,7 +56,7 @@ public class Nestable extends MidLine {
         if(block.getState() instanceof Sign s){
             SignSide side = s.getSide(Side.FRONT);
             side.line(0, Component.text(getSignMain().toUpperCase()));
-            side.line(2, Component.text(getSignSub()));
+            side.line(2, Component.text(CodeList.classToEnum(this).getSignText()));
             side.setGlowingText(true);
             side.setColor(getSignColour());
 
@@ -124,15 +126,18 @@ public class Nestable extends MidLine {
         current_index.incrementAndGet();
         return 0;
     }
-    public int codeHasIndex(AtomicInteger current_index, int index){
+    public int removeCodeAtIndex(AtomicInteger current_index, int index, @Nullable CodeBlock replace){
         if(index == current_index.intValue()){
+            if(replace instanceof Nestable n){
+                n.setCode(CODE);
+            }
             return 1;
         }
         current_index.incrementAndGet();
         int code_index = 0;
         for(CodeBlock c : CODE){
             if(c instanceof Nestable nest){
-                int result = nest.codeHasIndex(current_index, index);
+                int result = nest.removeCodeAtIndex(current_index, index, replace);
                 if(result == 1){
                     CODE.remove(code_index);
                     return 2;
@@ -192,5 +197,11 @@ public class Nestable extends MidLine {
         // TODO: copy mutable state here, so the clone can't change the internals of the original
         clone.CODE = new ArrayList<>(CODE);
         return clone;
+    }
+    public ArrayList<CodeBlock> getCode(){
+        return new ArrayList<>(CODE);
+    }
+    public void setCode(ArrayList<CodeBlock> c){
+        CODE = c;
     }
 }

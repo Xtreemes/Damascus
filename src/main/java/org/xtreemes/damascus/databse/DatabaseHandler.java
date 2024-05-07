@@ -6,9 +6,13 @@ import org.json.simple.parser.ParseException;
 import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.Rank;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.Base64;
 import java.util.logging.Level;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class DatabaseHandler {
 
@@ -139,8 +143,10 @@ public class DatabaseHandler {
             ResultSet result = prep.executeQuery();
             if(result.next()){
                 String code_json = result.getString("code");
+                String decom = decompressStringGZIP(code_json);
+
                 JSONParser parser = new JSONParser();
-                JSONArray array = (JSONArray) parser.parse(code_json);
+                JSONArray array = (JSONArray) parser.parse(decom);
                 return array;
             }
             return null;
@@ -164,11 +170,46 @@ public class DatabaseHandler {
             }
             String query = "UPDATE plots SET code = ? WHERE id = ?;";
             PreparedStatement prep = connection.prepareStatement(query);
-            prep.setString(1, array.toJSONString());
+
+            String input_string = array.toJSONString();
+            String compressed_json = compressStringGZIP(input_string);
+
+            prep.setString(1, compressed_json);
             prep.setString(2, id);
             prep.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static String compressStringGZIP(String input) {
+        try {
+            ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+            try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(output_stream)) {
+                gzipOutputStream.write(input.getBytes());
+            }
+            return Base64.getEncoder().encodeToString(output_stream.toByteArray());
+        } catch (IOException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private static String decompressStringGZIP(String input) {
+        try {
+            byte[] compressedBytes = Base64.getDecoder().decode(input);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedBytes);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = gzipInputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, len);
+                }
+            }
+            return outputStream.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

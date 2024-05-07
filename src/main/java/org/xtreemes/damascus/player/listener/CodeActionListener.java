@@ -123,7 +123,7 @@ public class CodeActionListener implements Listener {
                 DamascusWorld world = WorldDispatcher.getWorld(PlayerInfo.getLocation(player));
                 CodeLine cl = world.getCodeLine(block.getLocation());
                 if(cl != null) {
-                    boolean delete = cl.removeCode(cl.getIndex(block.getLocation()));
+                    boolean delete = cl.removeCode(cl.getIndex(block.getLocation()), null);
                     Material update = cl.updateBlocks(block.getLocation());
                     e.getBlock().setType(update);
                     if(delete){
@@ -151,7 +151,7 @@ public class CodeActionListener implements Listener {
                     CodeLine cl = WorldDispatcher.getWorld(PlayerInfo.getLocation(player)).getCodeLine(loc);
                     if(cl != null){
                         int index = cl.getIndex(loc);
-                        cl.removeCode(index);
+                        cl.removeCode(index, code);
                         cl.addCode(code, index);
                         cl.updateBlocks(null);
                     }

@@ -31,9 +31,6 @@ public abstract class CodeBlock implements Cloneable {
     public String getSignMain(){
         return "Placeholder";
     }
-    public String getSignSub(){
-        return "";
-    }
     public Material getConnector(){
         return Material.SPRUCE_PLANKS;
     }
@@ -50,7 +47,7 @@ public abstract class CodeBlock implements Cloneable {
          if(block.getState() instanceof Sign s){
              SignSide side = s.getSide(Side.FRONT);
              side.line(0, Component.text(getSignMain().toUpperCase()));
-             side.line(2, Component.text(getSignSub()));
+             side.line(2, Component.text(CodeList.classToEnum(this).getSignText()));
              side.setGlowingText(true);
              side.setColor(getSignColour());
 

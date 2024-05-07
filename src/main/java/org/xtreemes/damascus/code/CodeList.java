@@ -3,6 +3,9 @@ package org.xtreemes.damascus.code;
 import org.xtreemes.damascus.code.block.action.CrashAction;
 import org.xtreemes.damascus.code.block.action.SendMessageAction;
 import org.xtreemes.damascus.code.block.conditional.SneakingConditional;
+import org.xtreemes.damascus.code.block.empty.EmptyAction;
+import org.xtreemes.damascus.code.block.empty.EmptyConditional;
+import org.xtreemes.damascus.code.block.empty.EmptyTrigger;
 import org.xtreemes.damascus.code.block.trigger.JoinTrigger;
 import org.xtreemes.damascus.code.block.trigger.LeftClickTrigger;
 import org.xtreemes.damascus.code.block.trigger.RightClickTrigger;
@@ -17,19 +20,22 @@ public enum CodeList {
      */
 
     // TRIGGERS
+    T_EMPTY(new EmptyTrigger(), ""),
     T_JOIN(new JoinTrigger(), "Join"),
     T_RCLICK(new RightClickTrigger(), "RightClick"),
     T_LCLICK(new LeftClickTrigger(), "LeftClick"),
 
     // ACTIONS
+    A_EMPTY(new EmptyAction(), ""),
     A_CRASH(new CrashAction(), "Crash"),
     A_MESSAGE(new SendMessageAction(), "Message"),
 
     // CONDITIONAL
+    C_EMPTY(new EmptyConditional(), ""),
     C_SNEAKING(new SneakingConditional(), "Sneaking");
 
     private final CodeBlock CLASS;
-    private String SIGN = "";
+    private final String SIGN;
 
     CodeList(CodeBlock c, String sign){
         CLASS = c;
