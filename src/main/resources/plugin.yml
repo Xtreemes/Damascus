@@ -14,3 +14,8 @@ commands:
     usage: "/build"
   play:
     usage: "/play"
+
+  num:
+    usage: "/num <num>"
+  text:
+    usage: "/text <minimessage>"

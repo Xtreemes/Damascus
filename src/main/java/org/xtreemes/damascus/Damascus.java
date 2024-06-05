@@ -6,7 +6,13 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -16,6 +22,7 @@ import org.xtreemes.damascus.databse.DatabaseHandler;
 import org.xtreemes.damascus.player.command.Goto;
 import org.xtreemes.damascus.player.command.ModeCommand;
 import org.xtreemes.damascus.player.command.Setrank;
+import org.xtreemes.damascus.player.command.ValueCommand;
 import org.xtreemes.damascus.player.listener.ChatListener;
 import org.xtreemes.damascus.player.listener.CodeActionListener;
 import org.xtreemes.damascus.player.listener.JoinListener;
@@ -23,12 +30,14 @@ import org.xtreemes.damascus.world.DamascusWorld;
 import org.xtreemes.damascus.world.WorldDispatcher;
 
 import java.util.Map;
+import java.util.UUID;
 
 public final class Damascus extends JavaPlugin {
 
 
     public static boolean DB_STATUS;
     public static Plugin PLUGIN;
+    public static ItemStack ITEM_MY_PLOTS = formatItem(Material.DIAMOND, Component.text("My Plots", NamedTextColor.AQUA));
 
     @Override
     public void onEnable() {
@@ -48,6 +57,10 @@ public final class Damascus extends JavaPlugin {
         getCommand("dev").setExecutor(new ModeCommand());
         getCommand("build").setExecutor(new ModeCommand());
         getCommand("play").setExecutor(new ModeCommand());
+        getCommand("num").setExecutor(new ValueCommand());
+        getCommand("text").setExecutor(new ValueCommand());
+
+        getLogger().warning("hello world :3");
 
         setupScoreboard();
         getServer().motd(Component
@@ -82,5 +95,14 @@ public final class Damascus extends JavaPlugin {
             if(r == Rank.DEFAULT){continue;}
             t.prefix(r.getFormattedPrefix().append(Component.text(" ")));
         }
+    }
+    private static ItemStack formatItem(Material material, Component name){
+        ItemStack item = new ItemStack(material);
+        ItemMeta im = item.getItemMeta();
+        im.displayName(name.decoration(TextDecoration.ITALIC, false));
+        PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
+        pdc.set(NamespacedKey.fromString("item_instance", PLUGIN), PersistentDataType.STRING,UUID.randomUUID().toString());
+        item.setItemMeta(im);
+        return item;
     }
 }

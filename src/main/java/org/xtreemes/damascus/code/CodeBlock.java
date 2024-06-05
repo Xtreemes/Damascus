@@ -1,25 +1,30 @@
 package org.xtreemes.damascus.code;
 
+import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.parameters.Parameters;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class CodeBlock implements Cloneable {
 
     //TODO: add barrel-params as a param
-    protected Parameters PARAMS = new Parameters();
+    protected ItemStack[] BARREL_CONTENTS = null;
     abstract public void run(RunInfo info);
 
     public Material getSign(){
@@ -36,10 +41,19 @@ public abstract class CodeBlock implements Cloneable {
     }
 
     // Edits the origin directly (Reference) so no extra value needs to return
-    public ArrayList<Location> placeBlocks(Location origin){
+    public ArrayList<Location> placeBlocks(Location origin, boolean first_run){
          ArrayList<Location> locs = new ArrayList<>();
          locs.add(origin.clone());
-         origin.getBlock().setType(Material.BARREL);
+         Block b = origin.getBlock();
+         if(first_run && BARREL_CONTENTS == null){
+             Barrel bar = (Barrel) b.getState();
+             BARREL_CONTENTS = bar.getInventory().getContents();
+         }
+         b.setType(Material.BARREL);
+         if(BARREL_CONTENTS != null && b.getState() instanceof Barrel barrel){
+             Inventory inv = barrel.getInventory();
+             inv.setContents(BARREL_CONTENTS);
+         }
 
          origin.add(-1, 0, 0);
          Block block = origin.getBlock();
@@ -87,15 +101,31 @@ public abstract class CodeBlock implements Cloneable {
         json.put("code",CodeList.classToEnum(this).name());
         return json;
     }
+    public CodeBlock getCodeBlock(AtomicInteger current_index, int index){
+        if(index == current_index.intValue()){
+            return this;
+        }
+        current_index.incrementAndGet();
+        return null;
+    }
 
     @Override
     public CodeBlock clone() {
         try {
             CodeBlock clone = (CodeBlock) super.clone();
             // TODO: copy mutable state here, so the clone can't change the internals of the original
+            if(BARREL_CONTENTS != null){
+                clone.setBarrelContents(BARREL_CONTENTS.clone());
+            }
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+    public void setBarrelContents(@Nullable ItemStack @NotNull [] bc){
+        BARREL_CONTENTS = bc;
+    }
+    protected Parameters getParameters(){
+        return new Parameters(BARREL_CONTENTS);
     }
 }

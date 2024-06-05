@@ -4,5 +4,6 @@ public enum TriggerType {
     JOIN,
     QUIT,
     RCLICK,
-    LCLICK
+    LCLICK,
+    SNEAK
 }

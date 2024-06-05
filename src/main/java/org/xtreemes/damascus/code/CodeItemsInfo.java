@@ -4,8 +4,10 @@ import org.bukkit.Material;
 import org.xtreemes.damascus.code.block.empty.EmptyAction;
 import org.xtreemes.damascus.code.block.empty.EmptyConditional;
 import org.xtreemes.damascus.code.block.empty.EmptyTrigger;
+import org.xtreemes.damascus.code.block.world.WaitWorld;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class CodeItemsInfo {
@@ -14,13 +16,12 @@ public class CodeItemsInfo {
     private static final HashMap<Material, CodeBlock> MAT_TO_CLASS = new HashMap<>();
     public static void initialize(){
 
-        MATERIALS.add(Material.CYAN_CONCRETE);
-        MATERIALS.add(Material.YELLOW_CONCRETE);
-        MATERIALS.add(Material.PINK_CONCRETE);
-
         MAT_TO_CLASS.put(Material.CYAN_CONCRETE, new EmptyTrigger());
         MAT_TO_CLASS.put(Material.YELLOW_CONCRETE, new EmptyAction());
         MAT_TO_CLASS.put(Material.PINK_CONCRETE, new EmptyConditional());
+        MAT_TO_CLASS.put(Material.ORANGE_CONCRETE, new WaitWorld());
+
+        MATERIALS = new ArrayList<>(MAT_TO_CLASS.keySet());
 
         LINE_START.add(Material.CYAN_CONCRETE);
     }

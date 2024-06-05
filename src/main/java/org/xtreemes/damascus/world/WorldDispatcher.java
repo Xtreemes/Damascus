@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,11 +53,18 @@ public class WorldDispatcher {
         if(m == PlayerMode.DEV){
             p.teleport(getWorld(id).getDevWorld().getSpawnLocation());
             p.getInventory().setItem(8, code_item_container);
+            p.setGameMode(GameMode.CREATIVE);
         } else if(m == PlayerMode.BUILD){
             p.teleport(getWorld(id).getPlayWorld().getSpawnLocation());
             p.getInventory().setItem(8, code_item_container);
+            p.setGameMode(GameMode.CREATIVE);
         } else if(m == PlayerMode.PLAY){
             p.teleport(getWorld(id).getPlayWorld().getSpawnLocation());
+            p.getInventory().clear();
+            p.setGameMode(GameMode.SURVIVAL);
+            p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            p.setSaturation(20);
+            p.setFoodLevel(20);
         }
     }
     public static HashMap<String, DamascusWorld> getWorlds(){

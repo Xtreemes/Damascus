@@ -6,20 +6,17 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.xtreemes.damascus.code.CodeList;
-import org.xtreemes.damascus.code.block.action.CrashAction;
-import org.xtreemes.damascus.code.block.action.SendMessageAction;
-import org.xtreemes.damascus.code.block.action.Wait;
 
-public class ActionInvHolder extends CodeSelection {
-    public ActionInvHolder(Location loc) {
+public class WorldInvHolder extends CodeSelection {
+    public WorldInvHolder(Location loc) {
         super(loc);
     }
 
     @Override
     public @NotNull Inventory getInventory() {
         INVENTORY = Bukkit.createInventory(this, 27);
-        setItem(Material.BOOK, CodeList.A_MESSAGE);
-        setItem(Material.BARRIER, CodeList.A_CRASH);
+        setItem(Material.CLOCK, CodeList.W_WAIT);
+        setItem(Material.BARRIER, CodeList.W_CANCEL);
         return INVENTORY;
     }
 }

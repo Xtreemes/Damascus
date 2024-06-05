@@ -1,10 +1,12 @@
 package org.xtreemes.damascus.code;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.code.block.Nestable;
 import org.xtreemes.damascus.code.block.trigger.Trigger;
 
@@ -90,6 +92,24 @@ public class CodeLine {
         }
         return CODE.isEmpty();
     }
+    public CodeBlock getCodeBlock(int index){
+        AtomicInteger current_index = new AtomicInteger(0);
+        for(CodeBlock d : CODE){
+            if(d instanceof Nestable nest){
+                // If it's nestable, add to the Nestable's CODE value.
+                CodeBlock result = nest.getCodeBlock(current_index, index);
+                if(result != null){
+                    return result;
+                }
+            } else {
+                CodeBlock check = d.getCodeBlock(current_index, index);
+                if(check != null){
+                    return check;
+                }
+            }
+        }
+        return null;
+    }
 
     public int getIndex(Location loc){
         int index = (int) Math.round((loc.z() - LINE_STARTER.z())/2);
@@ -111,10 +131,11 @@ public class CodeLine {
             for(CodeBlock c : CODE){
                 c.run(info);
             }
+            info.cancelEvent();
         }).start();
     }
 
-    public Material updateBlocks(@Nullable Location loc){
+    public Material updateBlocks(@Nullable Location loc, boolean first_run){
         Material give_back = Material.AIR;
         for(Location b: BLOCKS){
             b.getBlock().setType(Material.AIR, false);
@@ -122,7 +143,7 @@ public class CodeLine {
         BLOCKS.clear();
         Location current = LINE_STARTER.clone();
         for(CodeBlock c : CODE){
-            ArrayList<Location> tentative = c.placeBlocks(current);
+            ArrayList<Location> tentative = c.placeBlocks(current, first_run);
             BLOCKS.addAll(tentative);
         }
         if(loc != null) {

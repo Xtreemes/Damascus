@@ -45,7 +45,7 @@ public class Nestable extends MidLine {
     }
 
     @Override
-    public ArrayList<Location> placeBlocks(Location origin){
+    public ArrayList<Location> placeBlocks(Location origin, boolean first_run){
         ArrayList<Location> locs = new ArrayList<>();
         locs.add(origin.clone());
         origin.getBlock().setType(Material.BARREL);
@@ -76,7 +76,7 @@ public class Nestable extends MidLine {
         locs.add(origin.clone());
         origin.add(0,0,1);
         for(CodeBlock c : CODE){
-            ArrayList<Location> append = c.placeBlocks(origin);
+            ArrayList<Location> append = c.placeBlocks(origin, first_run);
             locs.addAll(append);
         }
 
@@ -189,6 +189,28 @@ public class Nestable extends MidLine {
         }
         json.put("nested", array);
         return json;
+    }
+
+    public CodeBlock getCodeBlock(AtomicInteger current_index, int index){
+        if(index == current_index.intValue()){
+            return this;
+        }
+        current_index.incrementAndGet();
+        for(CodeBlock c : CODE){
+            if(c instanceof Nestable nest){
+                CodeBlock result = nest.getCodeBlock(current_index, index);
+                if(result != null){
+                    return result;
+                }
+            } else {
+                CodeBlock check = c.getCodeBlock(current_index, index);
+                if(check != null){
+                    return check;
+                }
+            }
+        }
+        current_index.incrementAndGet();
+        return null;
     }
 
     @Override

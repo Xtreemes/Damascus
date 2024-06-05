@@ -1,6 +1,7 @@
 package org.xtreemes.damascus.world;
 
 import org.bukkit.*;
+import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.CodeItemsInfo;
@@ -64,6 +65,7 @@ public class DamascusWorld {
         return world;
     }
 
+    @Nullable
     public CodeLine getAndAddCodeLine(Location location, Material material){
         boolean contains = CodeItemsInfo.LINE_START.contains(material);
         for(CodeLine cl : CODE_LINES){
@@ -110,13 +112,14 @@ public class DamascusWorld {
     public void removeCodeLine(CodeLine c){
         CODE_LINES.remove(c);
     }
-    public void trigger(TriggerType t, RunInfo info){
+    public boolean trigger(TriggerType t, RunInfo info){
         for(CodeLine cl : CODE_LINES){
             if(cl.isTrigger(t)){
                 cl.runCode(info);
-                break;
+                return true;
             }
         }
+        return false;
     }
     public void parseJSON(JSONArray json){
         for(Object o : json){
@@ -127,7 +130,7 @@ public class DamascusWorld {
             loc.set(Double.parseDouble(split_loc[0]), Double.parseDouble(split_loc[1]), Double.parseDouble(split_loc[2]));
             JSONArray array = (JSONArray) element.get("code");
             CodeLine cl = new CodeLine(loc, array);
-            cl.updateBlocks(null);
+            cl.updateBlocks(null, true);
             CODE_LINES.add(cl);
         }
     }

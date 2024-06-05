@@ -22,7 +22,8 @@ public class CodeItemsInvHolder implements InventoryHolder {
                 // Player Event
                 formatItem(Material.CYAN_CONCRETE, "Trigger", NamedTextColor.DARK_AQUA),
                 formatItem(Material.YELLOW_CONCRETE, "Action", NamedTextColor.YELLOW),
-                formatItem(Material.PINK_CONCRETE, "Conditional", NamedTextColor.LIGHT_PURPLE)
+                formatItem(Material.PINK_CONCRETE, "Conditional", NamedTextColor.LIGHT_PURPLE),
+                formatItem(Material.ORANGE_CONCRETE, "World", NamedTextColor.GOLD)
         );
         return this.INVENTORY;
     }
