@@ -12,6 +12,7 @@ import org.xtreemes.damascus.world.gens.DevGen;
 import org.xtreemes.damascus.world.gens.PlayGen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DamascusWorld {
 
@@ -19,6 +20,7 @@ public class DamascusWorld {
     private World PLAY;
     private final String ID;
     private final ArrayList<CodeLine> CODE_LINES = new ArrayList<>();
+    private final HashMap<String, String> GAME_VARIABLES = new HashMap<>();
 
     public World getDevWorld() {
         if(DEV == null){
@@ -113,6 +115,7 @@ public class DamascusWorld {
         CODE_LINES.remove(c);
     }
     public boolean trigger(TriggerType t, RunInfo info){
+        info.setGame(GAME_VARIABLES);
         for(CodeLine cl : CODE_LINES){
             if(cl.isTrigger(t)){
                 cl.runCode(info);

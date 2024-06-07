@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ import org.xtreemes.damascus.player.PlayerMode;
 import org.xtreemes.damascus.world.WorldDispatcher;
 
 public class ChatListener implements Listener {
+
     @EventHandler
     private static void onChat(AsyncChatEvent e){
         Player player = e.getPlayer();
@@ -57,7 +59,24 @@ public class ChatListener implements Listener {
                             Component.text(" ", Style.empty().color(NamedTextColor.WHITE)).hoverEvent(null));
         }
         Component message = prefix.append(Component.text(player.getName() + ": ", Style.empty().color(NamedTextColor.WHITE)).append(e.message()));
-        Bukkit.getServer().sendMessage(message);
+        String og_loc = PlayerInfo.getLocation(player);
+
+        Component away_message = Component.text("\u25C7",Style.empty().color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false));
+        Component present_message = Component.text("\u25C6",Style.empty().color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false));
+
+        HoverEvent<Component> hover = HoverEvent.showText(Component.text(og_loc, Style.empty().decoration(TextDecoration.ITALIC,false).color(NamedTextColor.GRAY)));
+
+        away_message = Component.empty().append(away_message.hoverEvent(hover).append(Component.text(" ")).append(message));
+        present_message = Component.empty().append(present_message.hoverEvent(hover)).append(Component.text(" ").append(message));
+
+        for(Player p : Bukkit.getOnlinePlayers()){
+            String location = PlayerInfo.getLocation(p);
+            if(location.equals(og_loc)){
+                p.sendMessage(present_message);
+            } else {
+                p.sendMessage(away_message);
+            }
+        }
     }
 
     @EventHandler

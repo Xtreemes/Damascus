@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,19 +18,23 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.xtreemes.damascus.code.CodeItemsInfo;
 import org.xtreemes.damascus.databse.DatabaseHandler;
-import org.xtreemes.damascus.player.command.Goto;
-import org.xtreemes.damascus.player.command.ModeCommand;
-import org.xtreemes.damascus.player.command.Setrank;
-import org.xtreemes.damascus.player.command.ValueCommand;
+import org.xtreemes.damascus.player.command.*;
 import org.xtreemes.damascus.player.listener.ChatListener;
 import org.xtreemes.damascus.player.listener.CodeActionListener;
 import org.xtreemes.damascus.player.listener.JoinListener;
 import org.xtreemes.damascus.world.DamascusWorld;
 import org.xtreemes.damascus.world.WorldDispatcher;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public final class Damascus extends JavaPlugin {
@@ -52,13 +57,7 @@ public final class Damascus extends JavaPlugin {
         );
         CodeItemsInfo.initialize();
 
-        getCommand("setrank").setExecutor(new Setrank());
-        getCommand("goto").setExecutor(new Goto());
-        getCommand("dev").setExecutor(new ModeCommand());
-        getCommand("build").setExecutor(new ModeCommand());
-        getCommand("play").setExecutor(new ModeCommand());
-        getCommand("num").setExecutor(new ValueCommand());
-        getCommand("text").setExecutor(new ValueCommand());
+        registerCommands();
 
         getLogger().warning("hello world :3");
 
@@ -104,5 +103,27 @@ public final class Damascus extends JavaPlugin {
         pdc.set(NamespacedKey.fromString("item_instance", PLUGIN), PersistentDataType.STRING,UUID.randomUUID().toString());
         item.setItemMeta(im);
         return item;
+    }
+    private void registerCommands(){
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage(this.getClass().getPackage().getName()))
+                .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner())
+        );
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(RegisterCommand.class);
+        for(Class<?> clazz : classes){
+            if(CommandExecutor.class.isAssignableFrom(clazz)){
+                RegisterCommand rc = clazz.getAnnotation(RegisterCommand.class);
+                String[] command_names = rc.value();
+                for(String command_name : command_names) {
+                    try {
+                        CommandExecutor command = (CommandExecutor) clazz.getDeclaredConstructor().newInstance();
+                        this.getCommand(command_name).setExecutor(command);
+                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException |
+                             NoSuchMethodException e) {
+                        System.out.println("uh oh");
+                    }
+                }
+            }
+        }
     }
 }

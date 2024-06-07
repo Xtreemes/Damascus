@@ -10,6 +10,7 @@ import org.xtreemes.damascus.code.block.trigger.JoinTrigger;
 import org.xtreemes.damascus.code.block.trigger.LeftClickTrigger;
 import org.xtreemes.damascus.code.block.trigger.RightClickTrigger;
 import org.xtreemes.damascus.code.block.trigger.SneakTrigger;
+import org.xtreemes.damascus.code.block.variable.SetVariableAction;
 import org.xtreemes.damascus.code.block.world.CancelWorld;
 import org.xtreemes.damascus.code.block.world.WaitWorld;
 import org.xtreemes.damascus.code.value.ValueType;
@@ -43,9 +44,10 @@ public enum CodeList {
 
     // WORLD
     W_WAIT(new WaitWorld(), "Wait", "Wait", "Pauses the code for a certain amount of ticks.", ValueType.NONE),
-    W_CANCEL(new CancelWorld(), "Cancel", "Cancel Event", "Cancels the event that triggered the code.", ValueType.NONE);
+    W_CANCEL(new CancelWorld(), "Cancel", "Cancel Event", "Cancels the event that triggered the code.", ValueType.NONE),
 
     // VARIABLE
+    V_SET(new SetVariableAction(), "=", "Set Variable", "Sets a variable", ValueType.VARIABLE);
 
     private final CodeBlock CLASS;
     private final String SIGN;

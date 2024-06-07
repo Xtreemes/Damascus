@@ -9,6 +9,7 @@ import org.xtreemes.damascus.player.PlayerInfo;
 import org.xtreemes.damascus.player.PlayerMode;
 import org.xtreemes.damascus.world.WorldDispatcher;
 
+@RegisterCommand({"dev","build","play"})
 public class ModeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {

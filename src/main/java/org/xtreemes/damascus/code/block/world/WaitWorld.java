@@ -6,7 +6,7 @@ public class WaitWorld extends WorldAction {
     @Override
     public void run(RunInfo info) {
         info.cancelEvent();
-        int n = (int) getParameters().getNumber() * 50;
+        int n = (int) getParameters(info).getNumber() * 50;
         if(n > 0) {
             try {
                 Thread.sleep(n);

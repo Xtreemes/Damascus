@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.xtreemes.damascus.code.value.Value;
 import org.xtreemes.damascus.code.value.ValueType;
 
+@RegisterCommand({"num","text","var"})
 public class ValueCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -24,6 +25,10 @@ public class ValueCommand implements CommandExecutor {
             case "text" -> {
                 Value tv = ValueType.TEXT.getValue().setFromString(arg);
                 item = tv.getAsItem();
+            }
+            case "var" -> {
+                Value vv = ValueType.VARIABLE.getValue().setFromString(arg);
+                item = vv.getAsItem();
             }
         }
         if(item != null){

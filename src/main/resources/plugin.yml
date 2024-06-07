@@ -14,8 +14,12 @@ commands:
     usage: "/build"
   play:
     usage: "/play"
+  sudo:
+    usage: "/sudo <player> <cmd>"
 
   num:
     usage: "/num <num>"
   text:
     usage: "/text <minimessage>"
+  var:
+    usage: "/var <name>"

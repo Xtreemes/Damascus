@@ -2,6 +2,7 @@ package org.xtreemes.damascus.player.listener;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,7 +34,7 @@ public class JoinListener implements Listener {
 
         PlayerInfo.setMode(player, PlayerMode.LOBBY);
         PlayerInfo.setRank(player, rank);
-        for(Player p:player.getWorld().getPlayers()){
+        for(Player p : Bukkit.getOnlinePlayers()){
             p.sendMessage(Component.text(player.getName() + " joined", NamedTextColor.GRAY));
         }
         e.joinMessage(null);
@@ -46,7 +47,7 @@ public class JoinListener implements Listener {
     @EventHandler
     private static void onQuit(PlayerQuitEvent e){
         Player player = e.getPlayer();
-        for(Player p:player.getWorld().getPlayers()){
+        for(Player p : Bukkit.getOnlinePlayers()){
             p.sendMessage(Component.text(player.getName() + " left", NamedTextColor.GRAY));
         }
         e.quitMessage(null);

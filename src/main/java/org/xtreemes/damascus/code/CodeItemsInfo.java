@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.xtreemes.damascus.code.block.empty.EmptyAction;
 import org.xtreemes.damascus.code.block.empty.EmptyConditional;
 import org.xtreemes.damascus.code.block.empty.EmptyTrigger;
+import org.xtreemes.damascus.code.block.variable.SetVariableAction;
 import org.xtreemes.damascus.code.block.world.WaitWorld;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class CodeItemsInfo {
         MAT_TO_CLASS.put(Material.YELLOW_CONCRETE, new EmptyAction());
         MAT_TO_CLASS.put(Material.PINK_CONCRETE, new EmptyConditional());
         MAT_TO_CLASS.put(Material.ORANGE_CONCRETE, new WaitWorld());
+        MAT_TO_CLASS.put(Material.WHITE_CONCRETE, new SetVariableAction());
 
         MATERIALS = new ArrayList<>(MAT_TO_CLASS.keySet());
 

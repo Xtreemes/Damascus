@@ -1,6 +1,7 @@
 package org.xtreemes.damascus.player.listener;
 
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
+import javassist.compiler.ast.Variable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -88,6 +89,7 @@ public class CodeActionListener implements Listener {
                 case YELLOW_CONCRETE -> inv = new ActionInvHolder(code_loc).getInventory();
                 case PINK_CONCRETE -> inv = new ConditionalInvHolder(code_loc).getInventory();
                 case ORANGE_CONCRETE -> inv = new WorldInvHolder(code_loc).getInventory();
+                case WHITE_CONCRETE -> inv = new VariableInvHolder(code_loc).getInventory();
             }
             player.openInventory(inv);
         }

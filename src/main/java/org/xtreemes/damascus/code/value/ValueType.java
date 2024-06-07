@@ -6,7 +6,8 @@ import net.kyori.adventure.text.format.TextColor;
 public enum ValueType {
     NONE(new NumberValue(), NamedTextColor.AQUA),
     NUMBER(new NumberValue(), NamedTextColor.RED),
-    TEXT(new TextValue(), TextColor.color(0x7CE530));
+    TEXT(new TextValue(), TextColor.color(0x7CE530)),
+    VARIABLE(new VariableValue(), NamedTextColor.YELLOW);
 
     private final Value VALUE_OBJECT;
     private final TextColor COLOR;

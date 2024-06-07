@@ -12,7 +12,7 @@ public class SendMessageAction extends Action {
     public void run(RunInfo info) {
         Entity target = info.getTargetEntity();
         if(target instanceof Player p){
-            Parameters param = getParameters();
+            Parameters param = getParameters(info);
             p.sendMessage(param.getText());
         }
     }

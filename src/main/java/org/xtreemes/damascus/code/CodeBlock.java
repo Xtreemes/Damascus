@@ -125,7 +125,7 @@ public abstract class CodeBlock implements Cloneable {
     public void setBarrelContents(@Nullable ItemStack @NotNull [] bc){
         BARREL_CONTENTS = bc;
     }
-    protected Parameters getParameters(){
-        return new Parameters(BARREL_CONTENTS);
+    protected Parameters getParameters(RunInfo info){
+        return new Parameters(BARREL_CONTENTS, info);
     }
 }

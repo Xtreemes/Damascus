@@ -9,13 +9,19 @@ import org.xtreemes.damascus.Rank;
 import org.xtreemes.damascus.databse.DatabaseHandler;
 import org.xtreemes.damascus.player.PlayerInfo;
 
+
+@RegisterCommand("setrank")
 public class Setrank implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        Player player = sender.getServer().getPlayer(sender.getName());
+        Player player = sender.getServer().getPlayer(args[0]);
+        if(player == null){
+            PlayerInfo.sendMessage((Player) sender, "Player not found!", PlayerInfo.MessageType.ERROR);
+            return true;
+        }
         try {
-            Rank rank = Rank.valueOf(args[0]);
+            Rank rank = Rank.valueOf(args[1]);
             if(!DatabaseHandler.setPlayerRank(player.getUniqueId().toString(), rank)){
                 PlayerInfo.sendMessage(player, "There was an issue setting the rank in the database.", PlayerInfo.MessageType.ERROR);
                 return true;
