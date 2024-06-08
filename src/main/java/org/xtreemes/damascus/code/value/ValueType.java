@@ -7,7 +7,8 @@ public enum ValueType {
     NONE(new NumberValue(), NamedTextColor.AQUA),
     NUMBER(new NumberValue(), NamedTextColor.RED),
     TEXT(new TextValue(), TextColor.color(0x7CE530)),
-    VARIABLE(new VariableValue(), NamedTextColor.YELLOW);
+    VARIABLE(new VariableValue(), NamedTextColor.YELLOW),
+    ANY(new NumberValue(), TextColor.color(0xC4C0FF));
 
     private final Value VALUE_OBJECT;
     private final TextColor COLOR;

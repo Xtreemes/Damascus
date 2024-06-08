@@ -5,8 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.xtreemes.damascus.code.RunInfo;
+import org.xtreemes.damascus.code.parameters.Parameter;
 import org.xtreemes.damascus.code.parameters.Parameters;
+import org.xtreemes.damascus.code.value.ValueType;
 
+@Parameter(value= ValueType.TEXT, desc="Message to send")
 public class SendMessageAction extends Action {
     @Override
     public void run(RunInfo info) {

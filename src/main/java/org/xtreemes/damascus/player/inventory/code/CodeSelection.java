@@ -10,12 +10,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.slf4j.event.KeyValuePair;
 import org.xtreemes.damascus.code.CodeBlock;
 import org.xtreemes.damascus.code.CodeList;
+import org.xtreemes.damascus.code.value.ValueType;
 import org.xtreemes.damascus.player.inventory.CancelClickInv;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public abstract class CodeSelection extends CancelClickInv {
     protected HashMap<ItemStack, CodeList> ITEM_TO_CODE = new HashMap<>();
@@ -43,6 +46,24 @@ public abstract class CodeSelection extends CancelClickInv {
             String string_line = current.deleteCharAt(current.length()-1).toString();
             lore.add(Component.text(string_line, Style.empty().decoration(TextDecoration.ITALIC, false).color(NamedTextColor.GRAY)));
         }
+
+
+        // Parameter Lore
+        ArrayList<KeyValuePair> params = code_enum.getParameters();
+        if(!params.isEmpty()){
+            lore.add(Component.empty().decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("Parameters",Style.empty()
+                    .color(NamedTextColor.WHITE)
+                    .decoration(TextDecoration.ITALIC, false)
+            ));
+            for(KeyValuePair param : params){
+                Component line = Component.empty();
+                line = line.append(Component.text(param.key,ValueType.valueOf(param.key).getColor()));
+                line = line.append(Component.text(" - ", NamedTextColor.DARK_GRAY)).append(Component.text((String) param.value, NamedTextColor.GRAY));
+                lore.add(line.decoration(TextDecoration.ITALIC, false));
+            }
+        }
+
         im.lore(lore);
         im.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS,
                 ItemFlag.HIDE_ATTRIBUTES,
