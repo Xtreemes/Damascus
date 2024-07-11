@@ -11,6 +11,7 @@ import org.xtreemes.damascus.code.block.trigger.JoinTrigger;
 import org.xtreemes.damascus.code.block.trigger.LeftClickTrigger;
 import org.xtreemes.damascus.code.block.trigger.RightClickTrigger;
 import org.xtreemes.damascus.code.block.trigger.SneakTrigger;
+import org.xtreemes.damascus.code.block.variable.IncrementVariableAction;
 import org.xtreemes.damascus.code.block.variable.SetVariableAction;
 import org.xtreemes.damascus.code.block.world.CancelWorld;
 import org.xtreemes.damascus.code.block.world.WaitWorld;
@@ -52,7 +53,8 @@ public enum CodeList {
     W_CANCEL(new CancelWorld(), "Cancel", "Cancel Event", "Cancels the event that triggered the code.", ValueType.NONE),
 
     // VARIABLE
-    V_SET(new SetVariableAction(), "=", "Set Variable", "Sets a variable", ValueType.VARIABLE);
+    V_SET(new SetVariableAction(), "=", "Set Variable", "Sets a variable.", ValueType.VARIABLE),
+    V_INCREMENT(new IncrementVariableAction(), "+=", "Increment Number", "Increments a variable.", ValueType.NUMBER);
 
     private final CodeBlock CLASS;
     private final String SIGN;

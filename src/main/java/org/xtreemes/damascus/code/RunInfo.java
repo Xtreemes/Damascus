@@ -62,13 +62,13 @@ public class RunInfo {
         }
         switch(scope){
             case GAME -> {
-                return GAME_VARIABLES.getOrDefault(variable_name, "");
+                return GAME_VARIABLES.getOrDefault(variable_name, "0");
             }
             case LOCAL -> {
-                return LOCAL_VARIABLES.getOrDefault(variable_name, "");
+                return LOCAL_VARIABLES.getOrDefault(variable_name, "0");
             }
         }
-        return "";
+        return "0";
     }
     public void setVariable(String variable, String value){
         String[] s = variable.split(":",2);

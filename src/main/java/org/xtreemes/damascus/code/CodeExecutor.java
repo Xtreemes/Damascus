@@ -16,9 +16,8 @@ public class CodeExecutor {
     public void executeNext(){
         if(!CODE.isEmpty()) {
             CODE.remove(0).execute(INFO, this::executeNext);
-            if(CODE.isEmpty() && CALLBACK != null){
-                CALLBACK.run();
-            }
+        } else if(CALLBACK != null) {
+            CALLBACK.run();
         }
     }
 }

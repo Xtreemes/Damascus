@@ -16,6 +16,7 @@ public class VariableInvHolder extends CodeSelection {
     public @NotNull Inventory getInventory() {
         INVENTORY = Bukkit.createInventory(this, 27);
         setItem(Material.IRON_INGOT, CodeList.V_SET);
+        setItem(Material.GLOWSTONE_DUST, CodeList.V_INCREMENT);
         return INVENTORY;
     }
 }
