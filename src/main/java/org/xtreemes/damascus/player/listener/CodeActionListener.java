@@ -1,7 +1,6 @@
 package org.xtreemes.damascus.player.listener;
 
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
-import javassist.compiler.ast.Variable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -25,7 +24,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.code.*;
 import org.xtreemes.damascus.code.value.ValueType;
-import org.xtreemes.damascus.code.value.VariableValue;
 import org.xtreemes.damascus.player.PlayerInfo;
 import org.xtreemes.damascus.player.PlayerMode;
 import org.xtreemes.damascus.player.inventory.CancelClickInv;
