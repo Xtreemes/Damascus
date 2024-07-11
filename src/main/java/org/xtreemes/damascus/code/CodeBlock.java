@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class CodeBlock implements Cloneable {
 
-    //TODO: add barrel-params as a param
     protected ItemStack[] BARREL_CONTENTS = null;
     abstract protected void run(RunInfo info);
 

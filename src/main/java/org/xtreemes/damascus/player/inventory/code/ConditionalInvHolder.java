@@ -17,6 +17,7 @@ public class ConditionalInvHolder extends CodeSelection {
     public @NotNull Inventory getInventory() {
         INVENTORY = Bukkit.createInventory(this, 27);
         setItem(Material.IRON_LEGGINGS, CodeList.C_SNEAKING);
+        setItem(Material.IRON_INGOT, CodeList.C_EQUALS);
         return INVENTORY;
     }
 }

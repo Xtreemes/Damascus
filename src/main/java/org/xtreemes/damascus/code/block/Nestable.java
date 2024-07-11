@@ -3,12 +3,14 @@ package org.xtreemes.damascus.code.block;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,7 +22,7 @@ import org.xtreemes.damascus.code.RunInfo;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Nestable extends MidLine {
+public abstract class Nestable extends MidLine {
     public ArrayList<CodeBlock> CODE = new ArrayList<>();
     public int getSize(){
         int sum = 1;
@@ -53,7 +55,16 @@ public class Nestable extends MidLine {
     public ArrayList<Location> placeBlocks(Location origin, boolean first_run){
         ArrayList<Location> locs = new ArrayList<>();
         locs.add(origin.clone());
-        origin.getBlock().setType(Material.BARREL);
+        Block b = origin.getBlock();
+        if(first_run && BARREL_CONTENTS == null){
+            Barrel bar = (Barrel) b.getState();
+            BARREL_CONTENTS = bar.getInventory().getContents();
+        }
+        b.setType(Material.BARREL);
+        if(BARREL_CONTENTS != null && b.getState() instanceof Barrel barrel){
+            Inventory inv = barrel.getInventory();
+            inv.setContents(BARREL_CONTENTS);
+        }
 
         origin.add(-1, 0, 0);
         Block block = origin.getBlock();
@@ -222,6 +233,9 @@ public class Nestable extends MidLine {
     public Nestable clone() {
         Nestable clone = (Nestable) super.clone();
         clone.CODE = new ArrayList<>(CODE);
+        if(BARREL_CONTENTS != null){
+            clone.setBarrelContents(BARREL_CONTENTS.clone());
+        }
         return clone;
     }
     public ArrayList<CodeBlock> getCode(){

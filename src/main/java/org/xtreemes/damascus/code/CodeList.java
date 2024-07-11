@@ -3,6 +3,7 @@ package org.xtreemes.damascus.code;
 import org.slf4j.event.KeyValuePair;
 import org.xtreemes.damascus.code.block.action.CrashAction;
 import org.xtreemes.damascus.code.block.action.SendMessageAction;
+import org.xtreemes.damascus.code.block.conditional.EqualsConditional;
 import org.xtreemes.damascus.code.block.conditional.SneakingConditional;
 import org.xtreemes.damascus.code.block.empty.EmptyAction;
 import org.xtreemes.damascus.code.block.empty.EmptyConditional;
@@ -47,6 +48,7 @@ public enum CodeList {
     // CONDITIONAL
     C_EMPTY(new EmptyConditional(), "", "", "", ValueType.NONE),
     C_SNEAKING(new SneakingConditional(), "Sneaking", "Is Sneaking", "is they ass out?", ValueType.NONE),
+    C_EQUALS(new EqualsConditional(), "==", "Value Equals", "Checks if a value equals another value.", ValueType.NONE),
 
     // WORLD
     W_WAIT(new WaitWorld(), "Wait", "Wait", "Pauses the code for a certain amount of ticks.", ValueType.NONE),
