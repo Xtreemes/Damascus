@@ -72,14 +72,16 @@ public class RunInfo {
     }
     public void setVariable(String variable, String value){
         String[] s = variable.split(":",2);
-        String variable_name = s[1];
-        VariableScope scope = VariableScope.GAME;
-        if(s[0].equals("LOCAL")){
-            scope = VariableScope.LOCAL;
-        }
-        switch(scope){
-            case GAME -> GAME_VARIABLES.put(variable_name, value);
-            case LOCAL -> LOCAL_VARIABLES.put(variable_name, value);
+        if(s.length == 2) {
+            String variable_name = s[1];
+            VariableScope scope = VariableScope.GAME;
+            if (s[0].equals("LOCAL")) {
+                scope = VariableScope.LOCAL;
+            }
+            switch (scope) {
+                case GAME -> GAME_VARIABLES.put(variable_name, value);
+                case LOCAL -> LOCAL_VARIABLES.put(variable_name, value);
+            }
         }
     }
 
