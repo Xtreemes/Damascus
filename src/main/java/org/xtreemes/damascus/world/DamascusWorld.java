@@ -33,14 +33,14 @@ public class DamascusWorld {
     }
     public World getPlayWorld() {
         if(PLAY == null){
-            int size = 16;
+            int size = 64;
             WorldCreator wc = setupWorldCreator("play");
             wc.generator(new PlayGen(size));
             World world = Bukkit.createWorld(wc);
             int middle =  (size * 16) /2;
             WorldBorder wb = world.getWorldBorder();
             wb.setCenter(middle,middle);
-            wb.setSize(16*16);
+            wb.setSize(size*16);
             world.setSpawnLocation(middle, 50, middle);
             PLAY = applyGamerules(world);
         }

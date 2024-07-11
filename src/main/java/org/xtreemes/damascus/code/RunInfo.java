@@ -10,7 +10,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class RunInfo {
     private final Event EVENT;
-    private final Entity TARGET_ENTITY;
+    private Entity DEFAULT_ENTITY;
+    private Entity SELECTED_ENTITY;
     private CompletableFuture<Boolean> SHOULD_CANCEL;
     private final boolean DEFAULT_CANCEL;
 
@@ -20,7 +21,7 @@ public class RunInfo {
 
     public RunInfo(@Nullable Event event, @Nullable Entity target, boolean should_cancel){
         this.EVENT = event;
-        this.TARGET_ENTITY = target;
+        this.DEFAULT_ENTITY = target;
         this.SHOULD_CANCEL = new CompletableFuture<>();
         this.DEFAULT_CANCEL = should_cancel;
     }
@@ -40,24 +41,45 @@ public class RunInfo {
         return this.EVENT;
     }
     @Nullable
-    public Entity getTargetEntity(){
-        return this.TARGET_ENTITY;
+    public Entity getDefaultEntity(){
+        return this.DEFAULT_ENTITY;
+    }
+    @Nullable
+    public Entity getSelectedEntity(){return this.SELECTED_ENTITY;}
+    public void setSelectedEntity(@Nullable Entity target){
+        this.SELECTED_ENTITY = target;
     }
 
     public void setGame(HashMap<String, String> game_variables){
         GAME_VARIABLES = game_variables;
     }
-    public String getVariableValue(String variable_name, VariableScope scope){
+    public String getVariableValue(String variable){
+        String[] s = variable.split(":",2);
+        String variable_name = s[1];
+        VariableScope scope = VariableScope.GAME;
+        if(s[0].equals("LOCAL")){
+            scope = VariableScope.LOCAL;
+        }
         switch(scope){
             case GAME -> {
                 return GAME_VARIABLES.getOrDefault(variable_name, "");
             }
+            case LOCAL -> {
+                return LOCAL_VARIABLES.getOrDefault(variable_name, "");
+            }
         }
         return "";
     }
-    public void setVariable(String variable_name, VariableScope scope, String value){
+    public void setVariable(String variable, String value){
+        String[] s = variable.split(":",2);
+        String variable_name = s[1];
+        VariableScope scope = VariableScope.GAME;
+        if(s[0].equals("LOCAL")){
+            scope = VariableScope.LOCAL;
+        }
         switch(scope){
             case GAME -> GAME_VARIABLES.put(variable_name, value);
+            case LOCAL -> LOCAL_VARIABLES.put(variable_name, value);
         }
     }
 }

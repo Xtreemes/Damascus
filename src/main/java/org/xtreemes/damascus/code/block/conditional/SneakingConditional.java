@@ -8,7 +8,7 @@ public class SneakingConditional extends Conditional {
 
     @Override
     public boolean condition(RunInfo info) {
-        Entity target = info.getTargetEntity();
+        Entity target = info.getDefaultEntity();
         if(target != null){
             if(target instanceof Player p){
                 return p.isSneaking();

@@ -2,6 +2,7 @@ package org.xtreemes.damascus.code.parameters;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -11,8 +12,8 @@ import org.slf4j.event.KeyValuePair;
 import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.code.RunInfo;
 import org.xtreemes.damascus.code.value.NumberValue;
+import org.xtreemes.damascus.code.value.SelectionValue;
 import org.xtreemes.damascus.code.value.TextValue;
-import org.xtreemes.damascus.code.block.variable.VariableScope;
 
 import java.util.ArrayList;
 
@@ -29,14 +30,13 @@ public class Parameters {
                         NamespacedKey nsk = NamespacedKey.fromString("value", Damascus.PLUGIN);
                         if (pdc.has(nsk)) {
                             String value = pdc.get(nsk, PersistentDataType.STRING);
-                            //String value_type = pdc.get(NamespacedKey.fromString("value_type", Damascus.PLUGIN), PersistentDataType.STRING);
                             QUEUE.add(value);
                         } else {
                             NamespacedKey var_nsk = NamespacedKey.fromString("variable", Damascus.PLUGIN);
                             if(pdc.has(var_nsk)){
                                 String var = pdc.get(var_nsk, PersistentDataType.STRING);
                                 // TODO: make it use actual var scope and not just game
-                                QUEUE.add(new KeyValuePair(var, info.getVariableValue(var, VariableScope.GAME)));
+                                QUEUE.add(new KeyValuePair(var, info.getVariableValue(var)));
                             }
                         }
                     }
@@ -79,8 +79,11 @@ public class Parameters {
         if(result_object instanceof String){
             s = "";
         } else if(result_object instanceof KeyValuePair kv){
-            s = (String) kv.key;
+            s = kv.key;
         }
         return s;
+    }
+    public SelectionValue getSelection(){
+        return (SelectionValue) new SelectionValue().setFromString(getNextString());
     }
 }

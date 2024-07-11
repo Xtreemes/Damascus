@@ -18,7 +18,6 @@ import org.xtreemes.damascus.player.inventory.CancelClickInv;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public abstract class CodeSelection extends CancelClickInv {
     protected HashMap<ItemStack, CodeList> ITEM_TO_CODE = new HashMap<>();

@@ -9,7 +9,7 @@ public class CrashAction extends Action {
 
     @Override
     public void run(RunInfo info) {
-        Entity e = info.getTargetEntity();
+        Entity e = info.getDefaultEntity();
         if(e instanceof Player p){
             p.spawnParticle(Particle.SQUID_INK, p.getLocation(), 1000000000, 1, 1, 1);
             p.spawnParticle(Particle.SQUID_INK, p.getLocation(), 1000000000, 1, 1, 1);
@@ -26,4 +26,5 @@ public class CrashAction extends Action {
             p.spawnParticle(Particle.SQUID_INK, p.getLocation(), 1000000000, 1, 1, 1);
         }
     }
+
 }

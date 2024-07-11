@@ -27,7 +27,7 @@ public class ValueCommand implements CommandExecutor {
                 item = tv.getAsItem();
             }
             case "var" -> {
-                Value vv = ValueType.VARIABLE.getValue().setFromString(arg);
+                Value vv = ValueType.VARIABLE.getValue().setFromString("GAME:" + arg);
                 item = vv.getAsItem();
             }
         }

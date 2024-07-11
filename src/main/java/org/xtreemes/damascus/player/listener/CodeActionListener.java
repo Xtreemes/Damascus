@@ -24,6 +24,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.code.*;
+import org.xtreemes.damascus.code.value.ValueType;
+import org.xtreemes.damascus.code.value.VariableValue;
 import org.xtreemes.damascus.player.PlayerInfo;
 import org.xtreemes.damascus.player.PlayerMode;
 import org.xtreemes.damascus.player.inventory.CancelClickInv;
@@ -51,6 +53,18 @@ public class CodeActionListener implements Listener {
                 if (pmode == PlayerMode.DEV) {
                     if (Boolean.TRUE.equals(pdc.get(NamespacedKey.fromString("code_item_container", Damascus.PLUGIN), PersistentDataType.BOOLEAN))) {
                         player.openInventory(new CodeItemsInvHolder().getInventory());
+                    }
+                    if(player.isSneaking()){
+                        if(pdc.has(NamespacedKey.fromString("variable",Damascus.PLUGIN))){
+                            String var_s = pdc.get(NamespacedKey.fromString("variable",Damascus.PLUGIN), PersistentDataType.STRING);
+                            String[] var = var_s.split(":",2);
+                            if(var[0].equals("LOCAL")){
+                                var[0] = "GAME";
+                            } else {
+                                var[0] = "LOCAL";
+                            }
+                            player.getInventory().setItemInMainHand(ValueType.VARIABLE.getValue().setFromString(var[0] + ":" + var[1]).getAsItem());
+                        }
                     }
                 } else if(pmode == PlayerMode.LOBBY){
 

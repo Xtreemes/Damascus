@@ -41,6 +41,10 @@ public class ChatListener implements Listener {
                 String value_type = pdc.get(NamespacedKey.fromString("value_type", Damascus.PLUGIN), PersistentDataType.STRING);
                 if(value_type != null){
                     String plain = PlainTextComponentSerializer.plainText().serialize(e.message());
+                    NamespacedKey var_check = NamespacedKey.fromString("variable",Damascus.PLUGIN);
+                    if(pdc.has(var_check)){
+                        plain = pdc.get(var_check, PersistentDataType.STRING).split(":")[0] + ":" + plain;
+                    }
                     item = ValueType.valueOf(value_type).getValue().setFromString(plain).getAsItem();
                     player.getInventory().setItemInMainHand(item);
                     return;
