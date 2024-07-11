@@ -8,7 +8,7 @@ public abstract class Starter extends CodeBlock {
     public abstract TriggerType getTrigger();
 
     @Override
-    public void run(RunInfo info){
+    protected void run(RunInfo info){
 
     }
 }

@@ -9,7 +9,7 @@ import org.xtreemes.damascus.code.value.ValueType;
 @Parameter(value=ValueType.ANY, desc="Value to set")
 public class SetVariableAction extends VariableAction {
     @Override
-    public void run(RunInfo info) {
+    protected void run(RunInfo info) {
         Parameters params = getParameters(info);
         info.setVariable(params.getVariable(), params.getValue());
     }

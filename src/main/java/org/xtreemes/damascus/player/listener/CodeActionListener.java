@@ -70,18 +70,14 @@ public class CodeActionListener implements Listener {
             }
             if (pmode == PlayerMode.PLAY) {
                 RunInfo run_info = new RunInfo(e, player, false);
-                if(WorldDispatcher.getWorld(PlayerInfo.getLocation(player)).trigger(TriggerType.RCLICK, run_info)){
-                    e.setCancelled(run_info.shouldCancel().join());
-                }
+                WorldDispatcher.getWorld(PlayerInfo.getLocation(player)).trigger(TriggerType.RCLICK, run_info);
             }
         }
         // Left Click
         else if (action.isLeftClick()) {
             if(pmode == PlayerMode.PLAY){
                 RunInfo run_info = new RunInfo(e, player, false);
-                if(WorldDispatcher.getWorld(PlayerInfo.getLocation(player)).trigger(TriggerType.LCLICK, run_info)){
-                    e.setCancelled(run_info.shouldCancel().join());
-                }
+                WorldDispatcher.getWorld(PlayerInfo.getLocation(player)).trigger(TriggerType.LCLICK, run_info);
             }
         }
     }

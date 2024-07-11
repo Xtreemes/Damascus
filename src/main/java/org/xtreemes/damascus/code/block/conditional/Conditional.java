@@ -8,13 +8,16 @@ import org.xtreemes.damascus.code.block.Nestable;
 
 public abstract class Conditional extends Nestable {
 
-    public void run(RunInfo info){
+    @Override
+    public void execute(RunInfo info, Runnable runnable){
         if(condition(info)){
             for(CodeBlock c : CODE){
-                c.run(info);
+                c.execute(info, runnable);
             }
         }
+        runnable.run();
     }
+
     abstract public boolean condition(RunInfo info);
     public DyeColor getSignColour(){
         return DyeColor.PINK;

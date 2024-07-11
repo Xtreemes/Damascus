@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.CodeBlock;
+import org.xtreemes.damascus.code.CodeExecutor;
 import org.xtreemes.damascus.code.CodeList;
 import org.xtreemes.damascus.code.RunInfo;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,8 +33,13 @@ public class Nestable extends MidLine {
         return sum;
     }
     @Override
-    public void run(RunInfo info) {
+    protected void run(RunInfo info) {
 
+    }
+    @Override
+    public void execute(RunInfo info, Runnable runnable){
+        CodeExecutor executor = new CodeExecutor(info, CODE, runnable);
+        executor.executeNext();
     }
 
     @Override
@@ -216,7 +221,6 @@ public class Nestable extends MidLine {
     @Override
     public Nestable clone() {
         Nestable clone = (Nestable) super.clone();
-        // TODO: copy mutable state here, so the clone can't change the internals of the original
         clone.CODE = new ArrayList<>(CODE);
         return clone;
     }

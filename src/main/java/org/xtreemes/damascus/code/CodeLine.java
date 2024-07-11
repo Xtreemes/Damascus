@@ -1,12 +1,10 @@
 package org.xtreemes.damascus.code;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.xtreemes.damascus.Damascus;
 import org.xtreemes.damascus.code.block.Nestable;
 import org.xtreemes.damascus.code.block.trigger.Trigger;
 
@@ -126,15 +124,6 @@ public class CodeLine {
         return index;
     }
 
-    public void runCode(RunInfo info){
-        new Thread(() -> {
-            for(CodeBlock c : CODE){
-                c.run(info);
-            }
-            info.cancelEvent();
-        }).start();
-    }
-
     public Material updateBlocks(@Nullable Location loc, boolean first_run){
         Material give_back = Material.AIR;
         for(Location b: BLOCKS){
@@ -171,5 +160,18 @@ public class CodeLine {
         }
         code_line.put("code", array);
         return code_line;
+    }
+
+    // CODE EXECUTION
+
+    public void runCode(RunInfo info){
+        CodeExecutor executor = new CodeExecutor(info, CODE, null);
+        executor.executeNext();
+//        new Thread(() -> {
+//            for(CodeBlock c : CODE){
+//                c.run(info);
+//            }
+//            info.cancelEvent();
+//        }).start();
     }
 }

@@ -82,4 +82,5 @@ public class RunInfo {
             case LOCAL -> LOCAL_VARIABLES.put(variable_name, value);
         }
     }
+
 }

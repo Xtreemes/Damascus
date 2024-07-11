@@ -1,8 +1,6 @@
 package org.xtreemes.damascus.code;
 
-import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,14 +16,19 @@ import org.json.simple.JSONObject;
 import org.xtreemes.damascus.code.parameters.Parameters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class CodeBlock implements Cloneable {
 
     //TODO: add barrel-params as a param
     protected ItemStack[] BARREL_CONTENTS = null;
-    abstract public void run(RunInfo info);
+    abstract protected void run(RunInfo info);
+
+    // unfortunately im dumb so the names "run" and "execute" are a liiiiittle similar :)
+    public void execute(RunInfo info, Runnable runnable){
+        run(info);
+        runnable.run();
+    }
 
     public Material getSign(){
         return Material.OAK_WALL_SIGN;
